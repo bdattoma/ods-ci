@@ -1,5 +1,8 @@
 *** Settings ***
 Resource  JupyterLabLauncher.robot
+Resource  ../../LoginPage.robot
+Resource  ../../ODH/ODHDashboard/ODHDashboard.robot
+Resource  LoginJupyterHub.robot
 Library  JupyterLibrary
 Library  String
 Library  Collections
@@ -9,7 +12,7 @@ ${JUPYTERHUB_SPAWNER_HEADER_XPATH} =  //div[contains(@class,"jsp-spawner__header
 
 *** Keywords ***
 JupyterHub Spawner Is Visible
-   ${spawner_visible} =  Run Keyword and Return Status  Wait Until Element Is Visible  xpath:${JUPYTERHUB_SPAWNER_HEADER_XPATH}
+   ${spawner_visible} =  Run Keyword and Return Status  Page Should Contain  xpath:${JUPYTERHUB_SPAWNER_HEADER_XPATH}
    [return]  ${spawner_visible}
 
 Select Notebook Image
@@ -116,6 +119,16 @@ Spawn Notebook With Arguments
       Click Element  xpath://span[@id='jupyterhub-logo']
    END
 
+Launch JupyterHub Spawner From Dashboard
+  Menu.Navigate To Page    Applications    Enabled
+  Launch JupyterHub From RHODS Dashboard Dropdown
+  Login To Jupyterhub  ${TEST_USER.USERNAME}  ${TEST_USER.PASSWORD}  ${TEST_USER.AUTH_TYPE}
+  ${authorization_required} =  Is Service Account Authorization Required
+  Run Keyword If  ${authorization_required}  Authorize jupyterhub service account
+  Fix Spawner Status
+  Wait Until Page Contains Element  xpath://span[@id='jupyterhub-logo']
+
+
 Get Spawner Progress Message
    [Documentation]  Get the progress message currently displayed
    ${msg} =  Get Text  progress-message
@@ -167,10 +180,15 @@ Fix Spawner Status
       ELSE
          ${JL_visible} =  JupyterLab Is Visible
          IF  ${JL_visible}==True
+            Maybe Close Popup
             Click Element  xpath://span[@title="/opt/app-root/src"]
-            Launch a new JupyterLab Document
+            Open With JupyterLab Menu  File  New  Notebook
+            Sleep  1
+            Maybe Close Popup
             Close Other JupyterLab Tabs
-            Add and Run JupyterLab Code Cell  !rm -rf *
+            Add and Run JupyterLab Code Cell in Active Notebook  !rm -rf *
+            Open With JupyterLab Menu  File  Close All Tabs
+            Maybe Close Popup
             Stop JupyterLab Notebook Server
             Handle Start My Server
          END
