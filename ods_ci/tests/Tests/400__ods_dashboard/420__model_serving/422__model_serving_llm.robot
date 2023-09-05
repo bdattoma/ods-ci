@@ -138,26 +138,28 @@ Verify User Can Deploy Multiple Models In Different Namespaces
 Verify Model Upgrade Using Canaray Rollout
     [Tags]    ODS-2372    WatsonX
     [Setup]    Set Project And Runtime    namespace=canary-model-upgrade
-    ${flan_isvc_name}=    Set Variable    flan-t5-small-caikit
-    ${model_name}=    Set Variable    flan-t5-small-caikit
-    ${models_names}=    Create List    ${model_name}
-    Compile And Query LLM model   isvc_name=${flan_isvc_name}
+    ${isvc_name}=    Set Variable    flan-t5-small-caikit
+    ${flan_model_name}=    Set Variable    flan-t5-small-caikit
+    ${bloom_model_name}=    Set Variable    bloom-560m-caikit
+    ${models_names}=    Create List    ${flan_model_name}
+    Compile And Query LLM model   isvc_name=${isvc_name}
     ...    sa_name=${DEFAULT_BUCKET_SA_NAME}
     ...    model_storage_uri=${FLAN_STORAGE_URI}
-    ...    model_name=${model_name}
+    ...    model_name=${flan_model_name}
     ...    namespace=canary-model-upgrade
     Log To Console    Applying Canary Tarffic for Model Upgrade
-    Compile And Query LLM Model   isvc_name=${flan_isvc_name}
+    ${models_names}=    Create List    ${bloom_model_name}
+    Compile And Query LLM Model   isvc_name=${isvc_name}
     ...    sa_name=${DEFAULT_BUCKET_SA_NAME}
     ...    model_storage_uri=${BLOOM_STORAGE_URI}
-    ...    model_name=${model_name}
+    ...    model_name=${bloom_model_name}
     ...    canaryTrafficPercent=20
     ...    namespace=canary-model-upgrade
 #    ...    multiple_query=YES
     Log To Console    Remove Canary Tarffic For Model Upgrade
-    Compile And Query LLM Model    isvc_name=${flan_isvc_name}
+    Compile And Query LLM Model    isvc_name=${isvc_name}
     ...    sa_name=${DEFAULT_BUCKET_SA_NAME}
-    ...    model_name=${model_name}
+    ...    model_name=${bloom_model_name}
     ...    model_storage_uri=${BLOOM_STORAGE_URI}
     ...    namespace=canary-model-upgrade
     [Teardown]   Clean Up Test Project    test_ns=canary-model-upgrade
