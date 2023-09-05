@@ -318,7 +318,7 @@ Verify User Can Set Requests And Limits For A Model
     ...    pod_label_selector=serving.kserve.io/inferenceservice=${flan_model_name}
     ...    namespace=${test_namespace}    exp_requests=${new_requests}    exp_limits=${NONE}
     [Teardown]   Clean Up Test Project    test_ns=${test_namespace}
-    ...    isvc_names=${model_name}
+    ...    isvc_names=${models_names}
 
 Verify Model Can Be Serverd And Query On A GPU Node
     [Tags]    ODS-2381    WatsonX    Resource-GPU
