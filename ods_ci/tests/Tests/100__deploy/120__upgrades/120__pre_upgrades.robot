@@ -125,7 +125,7 @@ Verify User Can Deploy Custom Runtime For Upgrade
 
 Verify Distributed Workload Metrics Resources By Creating Ray Cluster Workload
     [Documentation]    Creates the Ray Cluster and verify resource usage
-    [Tags]  Upgrade
+    [Tags]  Upgrade    DW
     ${PRJ_UPGRADE}    Set Variable    test-ns-rayupgrade
     ${JOB_NAME}    Set Variable    mnist
     Run Codeflare Upgrade Tests    TestMNISTRayClusterUp
