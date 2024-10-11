@@ -150,7 +150,7 @@ Create Floating IPs
     Export Variables From File    ${fips_file_to_export}
 
 Watch Hive Install Log
-    [Arguments]    ${pool_name}    ${namespace}    ${hive_timeout}=10m
+    [Arguments]    ${pool_name}    ${namespace}    ${hive_timeout}=7m
     ${label_selector} =    Set Variable    hive.openshift.io/cluster-deployment-name=${cluster_name}
     IF    ${use_cluster_pool}
         ${label_selector} =    Set Variable    hive.openshift.io/clusterpool-name=${pool_name}
@@ -185,7 +185,10 @@ Wait For Cluster To Be Ready
     END
     ${install_log_file} =    Set Variable    ${artifacts_dir}/${cluster_name}_install.log
     Create File    ${install_log_file}
-    Run Keyword And Continue On Failure    Watch Hive Install Log    ${pool_name}    ${pool_namespace}
+    ${hive_ret_status}=    Run Keyword And Return Status    Watch Hive Install Log    ${pool_name}    ${pool_namespace}
+    IF    not ${hive_ret_status}
+        FAIL    Cluster '${cluster_name}' provisioning failed        
+    END
     Log    Verifying that Cluster '${cluster_name}' has been provisioned and is running according to Hive Pool namespace '${pool_namespace}'      console=True    # robocop: disable:line-too-long
     ${provision_status} =    Run Process
     ...    oc -n ${pool_namespace} wait --for\=condition\=ProvisionFailed\=False cd ${clusterdeployment_name} --timeout\=15m    # robocop: disable:line-too-long
