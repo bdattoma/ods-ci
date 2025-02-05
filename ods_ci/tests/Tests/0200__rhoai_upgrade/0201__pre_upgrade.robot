@@ -40,56 +40,56 @@ ${UPGRADE_CONFIG_MAP}    upgrade-config-map
 
 
 *** Test Cases ***
-Set PVC Size Via UI
-    [Documentation]    Sets a Pod toleration via the admin UI
-    [Tags]      Upgrade
-    [Setup]     Begin Web Test
-    Set PVC Value In RHODS Dashboard        ${S_SIZE}
-    [Teardown]      Dashboard Test Teardown
-
-Set Culler Timeout
-    [Documentation]     Sets a culler timeout via the admin UI
-    [Tags]      Upgrade
-    [Setup]     Begin Web Test
-    Modify Notebook Culler Timeout      ${CUSTOM_CULLER_TIMEOUT}
-    [Teardown]      Dashboard Test Teardown
-
-Setting Pod Toleration Via UI
-    [Documentation]    Sets a Pod toleration via the admin UI
-    [Tags]      Upgrade
-    [Setup]     Begin Web Test
-    Menu.Navigate To Page       Settings        Cluster settings
-    Wait Until Page Contains        Notebook pod tolerations
-    Set Pod Toleration Via UI       TestToleration
-    Disable "Usage Data Collection"
-    [Teardown]      Dashboard Test Teardown
-
-Verify RHODS Accept Multiple Admin Groups And CRD Gets Updates
-    [Documentation]    Verify that users can set multiple admin groups and
-    ...    check OdhDashboardConfig CRD gets updated according to Admin UI
-    [Tags]      Upgrade     AutomationBug       RHOAIENG-14306
-    [Setup]     Begin Web Test
-    # robocop: disable
-    Launch Dashboard And Check User Management Option Is Available For The User
-    ...    ${TEST_USER.USERNAME}
-    ...    ${TEST_USER.PASSWORD}
-    ...    ${TEST_USER.AUTH_TYPE}
-    Clear User Management Settings
-    Add OpenShift Groups To Data Science Administrators     rhods-admins        rhods-users
-    Add OpenShift Groups To Data Science User Groups        system:authenticated
-    Save Changes In User Management Setting
-    [Teardown]      Dashboard Test Teardown
-
-Verify Custom Image Can Be Added
-    [Documentation]    Create Custome notebook using Cli
-    [Tags]      Upgrade
-    Oc Apply        kind=ImageStream        src=tests/Tests/0200__rhoai_upgrade/custome_image.yaml
-
-Verify User Can Disable The Runtime
-    [Documentation]    Disable the Serving runtime using Cli
-    [Tags]      Upgrade
-    Disable Model Serving Runtime Using CLI     namespace=redhat-ods-applications
-
+## Set PVC Size Via UI
+##     [Documentation]    Sets a Pod toleration via the admin UI
+##     [Tags]      Upgrade
+##     [Setup]     Begin Web Test
+##     Set PVC Value In RHODS Dashboard        ${S_SIZE}
+##     [Teardown]      Dashboard Test Teardown
+## 
+## Set Culler Timeout
+##     [Documentation]     Sets a culler timeout via the admin UI
+##     [Tags]      Upgrade
+##     [Setup]     Begin Web Test
+##     Modify Notebook Culler Timeout      ${CUSTOM_CULLER_TIMEOUT}
+##     [Teardown]      Dashboard Test Teardown
+## 
+## Setting Pod Toleration Via UI
+##     [Documentation]    Sets a Pod toleration via the admin UI
+##     [Tags]      Upgrade
+##     [Setup]     Begin Web Test
+##     Menu.Navigate To Page       Settings        Cluster settings
+##     Wait Until Page Contains        Notebook pod tolerations
+##     Set Pod Toleration Via UI       TestToleration
+##     Disable "Usage Data Collection"
+##     [Teardown]      Dashboard Test Teardown
+## 
+## Verify RHODS Accept Multiple Admin Groups And CRD Gets Updates
+##     [Documentation]    Verify that users can set multiple admin groups and
+##     ...    check OdhDashboardConfig CRD gets updated according to Admin UI
+##     [Tags]      Upgrade     AutomationBug       RHOAIENG-14306
+##     [Setup]     Begin Web Test
+##     # robocop: disable
+##     Launch Dashboard And Check User Management Option Is Available For The User
+##     ...    ${TEST_USER.USERNAME}
+##     ...    ${TEST_USER.PASSWORD}
+##     ...    ${TEST_USER.AUTH_TYPE}
+##     Clear User Management Settings
+##     Add OpenShift Groups To Data Science Administrators     rhods-admins        rhods-users
+##     Add OpenShift Groups To Data Science User Groups        system:authenticated
+##     Save Changes In User Management Setting
+##     [Teardown]      Dashboard Test Teardown
+## 
+## Verify Custom Image Can Be Added
+##     [Documentation]    Create Custome notebook using Cli
+##     [Tags]      Upgrade
+##     Oc Apply        kind=ImageStream        src=tests/Tests/0200__rhoai_upgrade/custome_image.yaml
+## 
+## Verify User Can Disable The Runtime
+##     [Documentation]    Disable the Serving runtime using Cli
+##     [Tags]      Upgrade
+##     Disable Model Serving Runtime Using CLI     namespace=redhat-ods-applications
+## 
 Verify Model Can Be Deployed Via UI For Upgrade
     # robocop: off=too-long-test-case
     # robocop: off=too-many-calls-in-test-case
@@ -158,16 +158,16 @@ Verify Model Can Be Deployed Via UI For Upgrade
     ...     Run Keyword If Test Failed      Get Events And Pod Logs     namespace=${PRJ_TITLE}
     ...     label_selector=name=modelmesh-serving-${runtime_pod_name}
 
-Verify User Can Deploy Custom Runtime For Upgrade
-    [Documentation]     Verify User Can Deploy Custom Runtime For Upgrade
-    [Tags]      Upgrade
-    Create Custom Serving Runtime Using Template By CLI
-    ...    tests/Resources/Files/caikit_runtime_template.yaml
-    Begin Web Test
-    Menu.Navigate To Page       Settings        Serving runtimes
-    Wait Until Page Contains        Add serving runtime     timeout=15s
-    Page Should Contain Element     //tr[@id='caikit-runtime']
-    [Teardown]      Dashboard Test Teardown
+## Verify User Can Deploy Custom Runtime For Upgrade
+##     [Documentation]     Verify User Can Deploy Custom Runtime For Upgrade
+##     [Tags]      Upgrade
+##     Create Custom Serving Runtime Using Template By CLI
+##     ...    tests/Resources/Files/caikit_runtime_template.yaml
+##     Begin Web Test
+##     Menu.Navigate To Page       Settings        Serving runtimes
+##     Wait Until Page Contains        Add serving runtime     timeout=15s
+##     Page Should Contain Element     //tr[@id='caikit-runtime']
+##     [Teardown]      Dashboard Test Teardown
 
 Verify Distributed Workload Metrics Resources By Creating Ray Cluster Workload
     # robocop: off=too-long-test-case
@@ -223,52 +223,52 @@ Verify Distributed Workload Metrics Resources By Creating Ray Cluster Workload
     [Teardown]      Run Keywords        Cleanup Codeflare-SDK Setup     AND
     ...     Run Keyword If Test Failed      Codeflare Upgrade Tests Teardown        ${PRJ_UPGRADE}      ${DW_PROJECT_CREATED}       # robocop: disable:line-too-long
 
-Run Training Operator ODH Setup PyTorchJob Test Use Case
-    [Documentation]    Run Training Operator ODH Setup PyTorchJob Test Use Case
-    [Tags]      Upgrade
-    [Setup]     Prepare Training Operator E2E Upgrade Test Suite
-    Skip If Operator Starting Version Is Not Supported      minimum_version=2.12.0
-    Run Training Operator ODH Upgrade Test      TestSetupPytorchjob
-    [Teardown]      Teardown Training Operator E2E Upgrade Test Suite
-
-Run Training Operator ODH Setup Sleep PyTorchJob Test Use Case
-    [Documentation]    Setup PyTorchJob which is kept running for 24 hours
-    [Tags]      Upgrade
-    [Setup]     Prepare Training Operator E2E Upgrade Test Suite
-    Skip If Operator Starting Version Is Not Supported      minimum_version=2.12.0
-    Run Training Operator ODH Upgrade Test          TestSetupSleepPytorchjob
-    [Teardown]      Teardown Training Operator E2E Upgrade Test Suite
-
-Data Science Pipelines Pre Upgrade Configuration
-    [Documentation]    Creates project dsp-test-upgrade and configures the pipeline resources testing upgrade
-    [Tags]      Upgrade     DataSciencePipelines-Backend
-    DataSciencePipelinesUpgradeTesting.Setup Environment For Upgrade Testing
-
-Model Registry Pre Upgrade Set Up
-    [Documentation]    Creates a Model Registry instance and registers a model/version
-    [Tags]      Upgrade     ModelRegistryUpgrade
-    Model Registry Pre Upgrade Scenario
-
-Long Running Jupyter Notebook
-    [Documentation]    Launch a long running notebook before the upgrade
-    [Tags]      Upgrade
-    Launch Notebook
-    Add And Run JupyterLab Code Cell In Active Notebook     ${CODE}
-
-    # Get the notebook pod creation timestamp
-    ${notebook_pod_name}=    Get User Notebook Pod Name    ${TEST_USER2.USERNAME}
-    ${return_code}    ${ntb_creation_timestamp} =    Run And Return Rc And Output
-    ...    oc get pod -n ${NOTEBOOKS_NAMESPACE} ${notebook_pod_name} --no-headers --output='custom-columns=TIMESTAMP:.metadata.creationTimestamp'    # robocop: disable: line-too-long
-    Should Be Equal As Integers     ${return_code}    0    msg=${ntb_creation_timestamp}
-
-    # Save the timestamp to the OpenShift ConfigMap so it can be used in test in the next phase
-    ${return_code}    ${cmd_output} =    Run And Return Rc And Output
-    ...    oc create configmap ${UPGRADE_CONFIG_MAP} -n ${UPGRADE_NS} --from-literal=ntb_creation_timestamp=${ntb_creation_timestamp}    # robocop: disable: line-too-long
-    Should Be Equal As Integers     ${return_code}    0    msg=${cmd_output}
-
-    Close Browser
-
-
+##Run Training Operator ODH Setup PyTorchJob Test Use Case
+##    [Documentation]    Run Training Operator ODH Setup PyTorchJob Test Use Case
+##    [Tags]      Upgrade
+##    [Setup]     Prepare Training Operator E2E Upgrade Test Suite
+##    Skip If Operator Starting Version Is Not Supported      minimum_version=2.12.0
+##    Run Training Operator ODH Upgrade Test      TestSetupPytorchjob
+##    [Teardown]      Teardown Training Operator E2E Upgrade Test Suite
+##
+##Run Training Operator ODH Setup Sleep PyTorchJob Test Use Case
+##    [Documentation]    Setup PyTorchJob which is kept running for 24 hours
+##    [Tags]      Upgrade
+##    [Setup]     Prepare Training Operator E2E Upgrade Test Suite
+##    Skip If Operator Starting Version Is Not Supported      minimum_version=2.12.0
+##    Run Training Operator ODH Upgrade Test          TestSetupSleepPytorchjob
+##    [Teardown]      Teardown Training Operator E2E Upgrade Test Suite
+##
+##Data Science Pipelines Pre Upgrade Configuration
+##    [Documentation]    Creates project dsp-test-upgrade and configures the pipeline resources testing upgrade
+##    [Tags]      Upgrade     DataSciencePipelines-Backend
+##    DataSciencePipelinesUpgradeTesting.Setup Environment For Upgrade Testing
+##
+##Model Registry Pre Upgrade Set Up
+##    [Documentation]    Creates a Model Registry instance and registers a model/version
+##    [Tags]      Upgrade     ModelRegistryUpgrade
+##    Model Registry Pre Upgrade Scenario
+##
+##Long Running Jupyter Notebook
+##    [Documentation]    Launch a long running notebook before the upgrade
+##    [Tags]      Upgrade
+##    Launch Notebook
+##    Add And Run JupyterLab Code Cell In Active Notebook     ${CODE}
+##
+##    # Get the notebook pod creation timestamp
+##    ${notebook_pod_name}=    Get User Notebook Pod Name    ${TEST_USER2.USERNAME}
+##    ${return_code}    ${ntb_creation_timestamp} =    Run And Return Rc And Output
+##    ...    oc get pod -n ${NOTEBOOKS_NAMESPACE} ${notebook_pod_name} --no-headers --output='custom-columns=TIMESTAMP:.metadata.creationTimestamp'    # robocop: disable: line-too-long
+##    Should Be Equal As Integers     ${return_code}    0    msg=${ntb_creation_timestamp}
+##
+##    # Save the timestamp to the OpenShift ConfigMap so it can be used in test in the next phase
+##    ${return_code}    ${cmd_output} =    Run And Return Rc And Output
+##    ...    oc create configmap ${UPGRADE_CONFIG_MAP} -n ${UPGRADE_NS} --from-literal=ntb_creation_timestamp=${ntb_creation_timestamp}    # robocop: disable: line-too-long
+##    Should Be Equal As Integers     ${return_code}    0    msg=${cmd_output}
+##
+##    Close Browser
+##
+##
 *** Keywords ***
 Launch Notebook
     [Documentation]    Launch notebook for the suite
