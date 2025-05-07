@@ -69,4 +69,5 @@ RUN poetry install
 RUN chgrp -R 0 . && \
     chmod -R g=u .
 
-ENTRYPOINT ["./build/run.sh"]
+ENTRYPOINT ["./run_robot_test.sh"]
+# ENTRYPOINT ["./build/run.sh"]
