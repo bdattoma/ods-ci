@@ -70,4 +70,3 @@ RUN chgrp -R 0 . && \
     chmod -R g=u .
 
 ENTRYPOINT ["./run_robot_test.sh"]
-# ENTRYPOINT ["./build/run.sh"]
