@@ -222,6 +222,16 @@ class OpenshiftClusterManager:
             log.error(f"Failed to create osd cluster {self.cluster_name}")
             sys.exit(1)
 
+    def list_clusters(self):
+        """Lists all available clusters"""
+
+        cmd = "ocm list clusters --columns name --no-headers"
+        ret = execute_command(cmd)
+        if ret is None:
+            log.error("Failed to list clusters")
+            sys.exit(1)
+        return ret
+
     def get_osd_cluster_id(self):
         """Gets OSD cluster ID used by ocm"""
 
@@ -1344,6 +1354,14 @@ if __name__ == "__main__":
         default="stage",
     )
     ocm_login_parser.set_defaults(func=ocm_obj.ocm_login)
+
+    # Argument parsers for list_clusters
+    list_clusters_parser = subparsers.add_parser(
+        "list_clusters",
+        help="List all available clusters via OCM.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    list_clusters_parser.set_defaults(func=ocm_obj.list_clusters)
 
     # Argument parsers for create_cluster
     create_cluster_parser = subparsers.add_parser(
